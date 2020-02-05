@@ -8,8 +8,13 @@ def repeating_xor_key(input_str, key):
             index = 0
     return output
 
-str1 = str.encode(input('String to encrypt: '))
-key = str.encode(input('Key to encrypt with: '))
+def main():
+    str1 = str.encode(input('String to encrypt: '))
+    key = str.encode(input('Key to encrypt with: '))
 
-output = repeating_xor_key(str1, key)
-print(output.hex())
+    output = repeating_xor_key(str1, key)
+    print(output.hex())
+
+
+if __name__ == '__main__':
+    main()

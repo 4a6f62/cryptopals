@@ -24,20 +24,26 @@ def get_english_score(input_bytes):
     }
     return sum([character_frequencies.get(chr(byte), 0) for byte in input_bytes.lower()])    
 
-hexstring = input("String 1: ")
-ciphertext = bytes.fromhex(hexstring)
+def get_potential_message(ciphertext):
+    potential_messages = []
+    for key_value in range(256):
+        message = single_char_xor(ciphertext, key_value)
+        score = get_english_score(message)
+        data = {
+            'message': message,
+            'score': score,
+            'key': key_value
+            }
+        potential_messages.append(data)
+    
+    return sorted(potential_messages, key=lambda x: x['score'], reverse=True)[0]
+    
+def main():
+    hexstring = input("String 1: ")
+    ciphertext = bytes.fromhex(hexstring)
+    potential_message = get_potential_message(ciphertext)
+    for item in potential_message:
+        return("{}: {}".format(item.title(), potential_message[item]))
 
-potential_messages = []
-for key_value in range(256):
-    message = single_char_xor(ciphertext, key_value)
-    score = get_english_score(message)
-    data = {
-        'message': message,
-        'score': score,
-        'key': key_value
-        }
-    potential_messages.append(data)
-  
-best_score = sorted(potential_messages, key=lambda x: x['score'], reverse=True)[0]
-for item in best_score:
-    print("{}: {}".format(item.title(), best_score[item]))
+if __name__ == '__main__':
+    main()

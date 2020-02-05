@@ -26,34 +26,38 @@ def get_english_score(input_bytes):
     }
     return sum([character_frequencies.get(chr(byte), 0) for byte in input_bytes.lower()])    
 
-url = 'https://cryptopals.com/static/challenge-data/4.txt'
-response = urllib.request.urlopen(url)
-data = response.read()
-output = data.decode('utf-8')
-lines_in_file = output.split("\n")
+def main():
+    url = 'https://cryptopals.com/static/challenge-data/4.txt'
+    response = urllib.request.urlopen(url)
+    data = response.read()
+    output = data.decode('utf-8')
+    lines_in_file = output.split("\n")
 
-best_scores = []
-for hexstring in lines_in_file:
-    potential_messages = []
-    ciphertext = bytes.fromhex(hexstring)
-    for key_value in range(256):
-        message = single_char_xor(ciphertext, key_value)
-        score = get_english_score(message)
-        data = {
-            'message': message,
-            'score': score,
-            'key': key_value
-            }
-        potential_messages.append(data)
-  
-    best_score = sorted(potential_messages, key=lambda x: x['score'], reverse=True)[0]
-    for item in best_score:
-        print("{}: {}".format(item.title(), best_score[item]))
+    best_scores = []
+    for hexstring in lines_in_file:
+        potential_messages = []
+        ciphertext = bytes.fromhex(hexstring)
+        for key_value in range(256):
+            message = single_char_xor(ciphertext, key_value)
+            score = get_english_score(message)
+            data = {
+                'message': message,
+                'score': score,
+                'key': key_value
+                }
+            potential_messages.append(data)
     
-    best_scores.append(best_score)
+        best_score = sorted(potential_messages, key=lambda x: x['score'], reverse=True)[0]
+        for item in best_score:
+            print("{}: {}".format(item.title(), best_score[item]))
+        
+        best_scores.append(best_score)
 
-bestest_score = sorted(best_scores, key=lambda x: x['score'], reverse=True)[0]
+    bestest_score = sorted(best_scores, key=lambda x: x['score'], reverse=True)[0]
 
-print('--------------------------------------------------------------------')
-for item in bestest_score:
-    print("{}: {}".format(item.title(), bestest_score[item]))
+    print('--------------------------------------------------------------------')
+    for item in bestest_score:
+        print("{}: {}".format(item.title(), bestest_score[item]))
+        
+if __name__ == '__main__':
+    main()
