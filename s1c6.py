@@ -46,18 +46,6 @@ def find_keysizes(ciphertext):
 
     return best_keys
 
-def transpose_blocks(blocks):
-    transposed_blocks = []
-    for block in blocks:
-        parts = [block[i:i+2] for i in range(0, len(block), 2)]
-        for x in range(len(parts)):
-            if x >= len(transposed_blocks):
-                transposed_blocks.append(b'')
-
-            transposed_blocks[x] += parts[x]
-            
-    return transposed_blocks
-
 def make_transposed_blocks(bytes_code, keysize):
     transposed_blocks = [b""] * keysize
     i = 0
